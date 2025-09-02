@@ -33,7 +33,7 @@ export default function DraftForm() {
   if (!draft) {
     return <EmptyDraft />;
   }
-  
+
   const setField = <K extends keyof typeof draft>(key: K, value: any) => {
     dispatch(updateField({ id: draft.id, key, value }));
     setTouched((prev) => ({ ...prev, [key as string]: true }));
@@ -122,18 +122,33 @@ export default function DraftForm() {
         </Field>
 
         <Field label="End Date">
-          <input className="input" type="date" value={draft.endDate} disabled />
+          <div className="grid gap-1">
+            <input
+              className="input"
+              type="date"
+              value={draft.endDate}
+              disabled
+            />
+            <span className="text-xs text-gray-500">
+              End date is automatically set to the next day.
+            </span>
+          </div>
         </Field>
 
         <Field label="Type" error={errIfTouched("type")}>
-          <Select
-            options={SERVICE_TYPES}
-            value={draft.type ?? ""} // empty string represents null here
-            onChange={(v) => setField("type", v || null)}
-            allowEmpty
-            placeholder="—"
-            className={fieldErrorClass(errIfTouched("type"))}
-          />
+          <div className="grid gap-1">
+            <Select
+              options={SERVICE_TYPES}
+              value={draft.type ?? ""}
+              onChange={(v) => setField("type", v || null)}
+              allowEmpty
+              placeholder="—"
+              className={fieldErrorClass(errIfTouched("type"))}
+            />
+            <span className="text-xs invisible">
+              End date is automatically set to the next day.
+            </span>
+          </div>
         </Field>
       </div>
 

@@ -4,11 +4,12 @@ import type { RootState, AppDispatch } from "@/app/store";
 import { updateLog } from "./logsSlice";
 import type { ServiceLog } from "@/types";
 import { validateDraft } from "@/lib/validation";
+import { MIN_ISO_DATE, plusOneDayISO } from "@/lib/dates";
 import { useEffect, useMemo, useState } from "react";
 import { useToast } from "@/components/ui/Toaster";
 import Field, { fieldErrorClass } from "@/components/form/Field";
+import { SERVICE_TYPES } from "@/constants/serviceTypes";
 
-// Compact, centered modal (inline styles) with live validation
 export default function EditLogDialog({
   id,
   onOpenChange,
@@ -21,35 +22,50 @@ export default function EditLogDialog({
   const log =
     useSelector((s: RootState) => s.logs.items.find((l) => l.id === id)) ||
     null;
+
   const [local, setLocal] = useState<ServiceLog | null>(log);
 
   useEffect(() => {
     setLocal(log);
-  }, [id]);
+  }, [id, log]);
 
-  const fieldErrors = useMemo(() => {
-    const e: Record<string, string> = {};
-    if (!local) return e;
-    if (!local.providerId?.trim()) e.providerId = "Required";
-    if (!local.serviceOrder?.trim()) e.serviceOrder = "Required";
-    if (!local.carId?.trim()) e.carId = "Required";
-    return e;
+  // Keep endDate = startDate + 1 day if startDate is present
+  useEffect(() => {
+    if (!local) return;
+    if (!local.startDate) return;
+    const must = plusOneDayISO(local.startDate);
+    if (local.endDate !== must) {
+      setLocal((prev) => (prev ? { ...prev, endDate: must } : prev));
+    }
+  }, [local?.startDate]); // endDate is derived; dependency only on startDate
+
+  // Build a draft-like object to reuse validation
+  const draftLike = useMemo(() => {
+    if (!local) return null as any;
+    return {
+      providerId: local.providerId || "",
+      serviceOrder: local.serviceOrder || "",
+      carId: local.carId || "",
+      odometer: local.odometer,
+      engineHours: local.engineHours,
+      startDate: local.startDate || "",
+      endDate: local.endDate || "",
+      type: local.type || "",
+      serviceDescription: local.serviceDescription || "",
+      savingStatus: "saved",
+      updatedAt: Date.now(),
+    } as any;
   }, [local]);
 
+  const fieldErrors = useMemo(
+    () => (draftLike ? validateDraft(draftLike) : {}),
+    [draftLike]
+  );
   const hasFieldErrors = Object.keys(fieldErrors).length > 0;
 
   const save = () => {
-    if (!local || hasFieldErrors) return;
-
-    const draftLike: any = {
-      ...local,
-      savingStatus: "saved",
-      updatedAt: Date.now(),
-      type: local.type,
-      odometer: local.odometer,
-      engineHours: local.engineHours,
-    };
-    const errs = validateDraft(draftLike);
+    if (!local) return;
+    const errs = validateDraft(draftLike as any);
     if (Object.keys(errs).length) {
       toast({
         variant: "error",
@@ -66,7 +82,6 @@ export default function EditLogDialog({
   return (
     <Dialog.Root open={!!id} onOpenChange={onOpenChange}>
       <Dialog.Portal>
-        {/* Dark overlay */}
         <Dialog.Overlay
           style={{
             position: "fixed",
@@ -76,7 +91,6 @@ export default function EditLogDialog({
             zIndex: 100,
           }}
         />
-        {/* Centered modal with reduced vertical padding */}
         <Dialog.Content
           style={{
             position: "fixed",
@@ -91,20 +105,25 @@ export default function EditLogDialog({
           }}
           className="card p-4 md:p-5 shadow-xl ring-1 ring-black/10"
         >
-          {/* Compact sticky header */}
-          <div className="flex items-center justify-between sticky px-4 md:px-5 top-0 -mx-4 md:-mx-5 py-2 bg-white/95 backdrop-blur border-b">
-            <Dialog.Title className="text-2xl font-semibold">
-              Edit log
-            </Dialog.Title>
-            <Dialog.Close
-              aria-label="Close"
-              className="rounded-md px-2 py-1 text-sm hover:bg-black/5"
-            >
-              ×
-            </Dialog.Close>
+          <div className="sticky top-0 bg-white/95 backdrop-blur">
+            <div className="flex items-center justify-between border-b pb-2">
+              <Dialog.Title className="text-2xl font-semibold">
+                Edit log
+              </Dialog.Title>
+              <Dialog.Close
+                aria-label="Close"
+                className="
+                  rounded-lg p-2 text-2xl leading-none
+                  hover:bg-black/5 cursor-pointer
+                  transition-colors duration-150 ease-out
+                  select-none
+                "
+              >
+                ×
+              </Dialog.Close>
+            </div>
           </div>
 
-          {/* Form body with tighter spacing */}
           {local && (
             <div className="grid gap-3 mt-3">
               <Field label="Provider" error={fieldErrors.providerId}>
@@ -139,6 +158,84 @@ export default function EditLogDialog({
                 />
               </Field>
 
+              <Field label="Odometer (mi)" error={fieldErrors.odometer}>
+                <input
+                  type="number"
+                  inputMode="numeric"
+                  className={`input ${fieldErrorClass(fieldErrors.odometer)}`}
+                  value={String(local.odometer)}
+                  onChange={(e) =>
+                    setLocal({ ...local, odometer: Number(e.target.value) })
+                  }
+                />
+              </Field>
+
+              <Field label="Engine Hours" error={fieldErrors.engineHours}>
+                <input
+                  type="number"
+                  inputMode="numeric"
+                  className={`input ${fieldErrorClass(
+                    fieldErrors.engineHours
+                  )}`}
+                  value={String(local.engineHours)}
+                  onChange={(e) =>
+                    setLocal({ ...local, engineHours: Number(e.target.value) })
+                  }
+                />
+              </Field>
+
+              <Field label="Start Date" error={fieldErrors.startDate}>
+                <input
+                  type="date"
+                  min={MIN_ISO_DATE}
+                  className={`input ${fieldErrorClass(fieldErrors.startDate)}`}
+                  value={local.startDate}
+                  onChange={(e) => {
+                    const start = e.target.value;
+                    const nextEnd = start ? plusOneDayISO(start) : "";
+                    setLocal((prev) =>
+                      prev
+                        ? { ...prev, startDate: start, endDate: nextEnd }
+                        : prev
+                    );
+                  }}
+                />
+              </Field>
+
+              <Field label="End Date (auto)">
+                <input
+                  type="date"
+                  min={MIN_ISO_DATE}
+                  className="input"
+                  value={local.endDate}
+                  disabled
+                  readOnly
+                />
+                <span className="text-xs text-gray-500 mt-1 block">
+                  End date is automatically set to the next day.
+                </span>
+              </Field>
+
+              <Field label="Type" error={fieldErrors.type}>
+                <select
+                  className={`input ${fieldErrorClass(fieldErrors.type)}`}
+                  value={local.type}
+                  onChange={(e) =>
+                    setLocal({
+                      ...local,
+                      type: e.target.value as ServiceLog["type"],
+                    })
+                  }
+                >
+                  <option value="">—</option>
+                  {SERVICE_TYPES.map((o) => (
+                    <option key={o.value} value={o.value}>
+                      {o.label}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+
               <Field label="Description (optional)">
                 <textarea
                   className="input min-h-[100px]"
@@ -149,7 +246,6 @@ export default function EditLogDialog({
                 />
               </Field>
 
-              {/* Compact footer */}
               <div className="flex items-center justify-end gap-2 pt-3 mt-1 border-t">
                 <Dialog.Close className="btn-outline">Cancel</Dialog.Close>
                 <button
