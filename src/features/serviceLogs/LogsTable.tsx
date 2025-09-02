@@ -17,6 +17,7 @@ import { FILTER_TYPE_OPTIONS } from "@/constants/serviceTypes";
 import Ellipsis from "@/components/ui/Ellipsis";
 import TypeBadge from "./TypeBadge";
 import { ColGroup } from "./tableLayout";
+import ConfirmDialog from "@/components/ui/ConfirmDialog";
 
 export default function LogsTable() {
   const dispatch = useDispatch<AppDispatch>();
@@ -25,9 +26,15 @@ export default function LogsTable() {
   const f = useSelector((s: RootState) => s.filters);
   const [editId, setEditId] = useState<string | null>(null);
 
-  const onDelete = (id: string) => {
-    dispatch(deleteLog(id));
+  // state for delete confirmation
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+
+  const askDelete = (id: string) => setPendingDeleteId(id);
+  const confirmDelete = () => {
+    if (!pendingDeleteId) return;
+    dispatch(deleteLog(pendingDeleteId));
     toast({ variant: "success", title: "Service log deleted" });
+    setPendingDeleteId(null);
   };
 
   return (
@@ -61,7 +68,6 @@ export default function LogsTable() {
       <div className="card overflow-auto">
         <table className="table w-full" style={{ tableLayout: "fixed" }}>
           <ColGroup />
-
           <thead className="bg-gray-50">
             <tr>
               <th className="th whitespace-nowrap">Provider</th>
@@ -76,7 +82,6 @@ export default function LogsTable() {
               <th className="th"></th>
             </tr>
           </thead>
-
           <tbody>
             {logs.map((l) => (
               <tr key={l.id} className="tr">
@@ -114,7 +119,7 @@ export default function LogsTable() {
                     </button>
                     <button
                       className="btn-xs-danger"
-                      onClick={() => onDelete(l.id)}
+                      onClick={() => askDelete(l.id)}
                     >
                       Delete
                     </button>
@@ -136,6 +141,18 @@ export default function LogsTable() {
       <EditLogDialog
         id={editId}
         onOpenChange={(open) => !open && setEditId(null)}
+      />
+
+      {/* Delete confirmation */}
+      <ConfirmDialog
+        open={pendingDeleteId !== null}
+        onOpenChange={(o) => !o && setPendingDeleteId(null)}
+        title="Delete service log?"
+        description="This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+        onConfirm={confirmDelete}
+        danger
       />
     </div>
   );
