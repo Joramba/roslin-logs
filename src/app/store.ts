@@ -2,8 +2,8 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { persistReducer, persistStore, storage } from "./persist";
 
 import draftsReducer from "@/features/drafts/draftsSlice";
-import logsReducer from "@/features/logs/logsSlice";
-import filtersReducer from "@/features/logs/filtersSlice";
+import logsReducer from "@/features/serviceLogs/logsSlice";
+import filtersReducer from "@/features/serviceLogs/filtersSlice";
 
 const rootReducer = combineReducers({
   drafts: draftsReducer,

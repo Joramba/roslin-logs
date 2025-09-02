@@ -1,12 +1,12 @@
 import DraftList from "@/features/drafts/DraftList";
 import DraftForm from "@/features/drafts/DraftForm";
-import LogsTable from "@/features/logs/LogsTable";
+import LogsTable from "@/features/serviceLogs/LogsTable";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "@/app/store";
 import { validateDraft } from "@/lib/validation";
 import type { ServiceLog } from "@/types";
 import { nanoid } from "nanoid";
-import { addLog } from "@/features/logs/logsSlice";
+import { addLog } from "@/features/serviceLogs/logsSlice";
 import { useToast } from "@/components/ui/Toaster";
 
 export default function ServiceLogsPage() {
