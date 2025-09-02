@@ -1,0 +1,99 @@
+@import "tailwindcss";
+
+/* Buttons / Inputs / Cards */
+@layer components {
+  .input {
+    @apply w-full px-3 py-2 rounded-xl border outline-none shadow-sm
+           focus:ring-2 focus:ring-black/10;
+  }
+
+  /* Primary/neutral button with richer hover/focus states */
+  .btn {
+    @apply inline-flex items-center justify-center rounded-xl px-3 py-2 border
+           bg-white shadow-sm cursor-pointer
+           transition duration-150
+           hover:bg-gray-100 hover:border-gray-300 hover:shadow-md hover:-translate-y-[1px]
+           active:translate-y-0
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/10
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  /* Outline button (e.g., "Clear All Drafts") */
+  .btn-outline {
+    @apply inline-flex items-center justify-center rounded-xl px-3 py-2 border
+           bg-white cursor-pointer
+           transition duration-150
+           hover:bg-gray-100 hover:border-gray-300 hover:shadow-md hover:-translate-y-[1px]
+           active:translate-y-0
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/10
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  /* Destructive button */
+  .btn-danger {
+    @apply inline-flex items-center justify-center rounded-xl px-3 py-2 border
+           bg-rose-600 text-white cursor-pointer
+           transition duration-150
+           hover:bg-rose-700 hover:-translate-y-[1px]
+           active:translate-y-0
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-300
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  /* Compact button (e.g., "Edit" in the table) */
+  .btn-xs {
+    @apply inline-flex items-center justify-center rounded-lg px-2 py-1 border text-xs
+           bg-white cursor-pointer
+           transition duration-150
+           hover:bg-gray-100 hover:border-gray-300 hover:shadow-sm hover:-translate-y-[0.5px]
+           active:translate-y-0;
+  }
+
+  /* Compact destructive button (e.g., "Delete" in the table) */
+  .btn-xs-danger {
+    @apply inline-flex items-center justify-center rounded-lg px-2 py-1 border text-xs
+           bg-rose-600 text-white cursor-pointer
+           transition duration-150
+           hover:bg-rose-700 hover:-translate-y-[0.5px]
+           active:translate-y-0;
+  }
+
+  .card {
+    @apply rounded-2xl border bg-white shadow-sm;
+  }
+
+  /* Type badges */
+  .badge {
+    @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border;
+  }
+  .badge-planned {
+    @apply border-emerald-300 text-emerald-700 bg-emerald-50;
+  }
+  .badge-unplanned {
+    @apply border-amber-300  text-amber-700  bg-amber-50;
+  }
+  .badge-emergency {
+    @apply border-rose-300    text-rose-700    bg-rose-50;
+  }
+  .badge-active {
+    @apply border-blue-300    text-blue-700    bg-blue-50;
+  }
+}
+
+@layer utilities {
+  .container {
+    @apply mx-auto max-w-7xl;
+  }
+  .table {
+    @apply min-w-full table-auto;
+  }
+  .th {
+    @apply text-left text-xs font-semibold uppercase tracking-wide text-gray-600 px-4 py-3;
+  }
+  .td {
+    @apply px-4 py-3 align-top;
+  }
+  .tr {
+    @apply border-t hover:bg-gray-50/70;
+  }
+}
