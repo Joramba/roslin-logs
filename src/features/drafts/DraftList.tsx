@@ -16,6 +16,12 @@ export default function DraftList() {
     (s: RootState) => s.drafts
   );
 
+  const hasDrafts = order.length > 0;
+  if (!hasDrafts) {
+    // No drafts -> hide the whole left panel controls completely.
+    return null;
+  }
+
   const onDeleteActive = () => {
     if (!activeDraftId) return;
     dispatch(deleteDraft(activeDraftId));
@@ -44,7 +50,7 @@ export default function DraftList() {
         )}
       </div>
 
-      {/* Click to switch drafts */}
+      {/* Drafts list */}
       <ul className="grid gap-2">
         {order.map((id) => {
           const d = byId[id];
@@ -61,15 +67,12 @@ export default function DraftList() {
                   : "hover:bg-gray-50",
               ].join(" ")}
             >
-              {/* Text column must be flex-1/min-w-0 so ellipsis can clamp */}
               <div className="text-left flex-1 min-w-0">
-                {/* Title: up to 2 lines with tooltip on hover */}
                 <Ellipsis
                   text={d.providerId?.trim() || "(untitled)"}
                   lines={2}
                   className="font-medium block"
                 />
-                {/* Subline: single-line ellipsis with tooltip */}
                 <Ellipsis
                   text={`${d.serviceOrder || "—"} · ${d.carId || "—"}`}
                   lines={1}

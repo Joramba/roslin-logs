@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import Field, { fieldErrorClass } from "@/components/form/Field";
 import Select from "@/components/form/Select";
 import { SERVICE_TYPES } from "@/constants/serviceTypes";
+import EmptyDraft from "./EmptyDraft";
 
 export default function DraftForm() {
   const dispatch = useDispatch<AppDispatch>();
@@ -29,9 +30,10 @@ export default function DraftForm() {
     setErrors(validateDraft(draft) as any);
   }, [draft?.updatedAt]);
 
-  if (!draft)
-    return <div className="text-sm text-gray-500">Create a draft to start</div>;
-
+  if (!draft) {
+    return <EmptyDraft />;
+  }
+  
   const setField = <K extends keyof typeof draft>(key: K, value: any) => {
     dispatch(updateField({ id: draft.id, key, value }));
     setTouched((prev) => ({ ...prev, [key as string]: true }));

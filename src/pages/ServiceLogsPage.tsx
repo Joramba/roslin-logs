@@ -12,9 +12,13 @@ import { useToast } from "@/components/ui/Toaster";
 export default function ServiceLogsPage() {
   const dispatch = useDispatch<AppDispatch>();
   const toast = useToast();
-  const { activeDraftId, byId } = useSelector((s: RootState) => s.drafts);
-  const active = activeDraftId ? byId[activeDraftId] : null;
 
+  const { activeDraftId, byId, order } = useSelector(
+    (s: RootState) => s.drafts
+  );
+  const hasDrafts = order.length > 0;
+
+  const active = activeDraftId ? byId[activeDraftId] : null;
   const errors = active ? validateDraft(active) : {};
   const isValid = !!active && Object.keys(errors).length === 0;
 
@@ -52,21 +56,27 @@ export default function ServiceLogsPage() {
     }
   };
 
+  const gridClass = hasDrafts
+    ? "grid md:grid-cols-[320px_1fr] gap-6"
+    : "grid gap-6";
+
   return (
     <div className="container p-6 space-y-8">
       <h1 className="text-2xl font-bold">Service Logs</h1>
 
-      <section className="grid md:grid-cols-[320px_1fr] gap-6">
-        <div className="space-y-4">
-          <DraftList />
-          <button
-            className="btn w-full"
-            onClick={createLog}
-            disabled={!isValid}
-          >
-            Create Service Log
-          </button>
-        </div>
+      <section className={gridClass}>
+        {hasDrafts && (
+          <div className="space-y-4">
+            <DraftList />
+            <button
+              className="btn w-full"
+              onClick={createLog}
+              disabled={!isValid}
+            >
+              Create Service Log
+            </button>
+          </div>
+        )}
 
         <div className="card p-4">
           <DraftForm />
