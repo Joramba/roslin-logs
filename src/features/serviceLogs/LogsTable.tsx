@@ -14,16 +14,9 @@ import { useToast } from "@/components/ui/Toaster";
 import DateFilterInput from "@/components/form/DateFilterInput";
 import Select from "@/components/form/Select";
 import { FILTER_TYPE_OPTIONS } from "@/constants/serviceTypes";
-
-function TypeBadge({ t }: { t: string }) {
-  const cls =
-    t === "planned"
-      ? "badge badge-planned"
-      : t === "unplanned"
-      ? "badge badge-unplanned"
-      : "badge badge-emergency";
-  return <span className={cls}>{t}</span>;
-}
+import Ellipsis from "@/components/ui/Ellipsis";
+import TypeBadge from "./TypeBadge";
+import { ColGroup } from "./tableLayout";
 
 export default function LogsTable() {
   const dispatch = useDispatch<AppDispatch>();
@@ -47,14 +40,11 @@ export default function LogsTable() {
           value={f.search}
           onChange={(e) => dispatch(setSearch(e.target.value))}
         />
-
-        {/* Type filter using reusable Select */}
         <Select
           options={FILTER_TYPE_OPTIONS as any}
           value={f.type}
           onChange={(v) => dispatch(setType(v as any))}
         />
-
         <DateFilterInput
           value={f.startFrom ?? null}
           onChange={(v) => dispatch(setStartFrom(v))}
@@ -69,36 +59,53 @@ export default function LogsTable() {
 
       {/* Table */}
       <div className="card overflow-auto">
-        <table className="table">
+        <table className="table w-full" style={{ tableLayout: "fixed" }}>
+          <ColGroup />
+
           <thead className="bg-gray-50">
             <tr>
-              <th className="th">Provider</th>
-              <th className="th">Order</th>
-              <th className="th">Car</th>
-              <th className="th">Odometer</th>
-              <th className="th">Engine h.</th>
-              <th className="th">Start</th>
-              <th className="th">End</th>
-              <th className="th">Type</th>
-              <th className="th">Description</th>
+              <th className="th whitespace-nowrap">Provider</th>
+              <th className="th whitespace-nowrap">Order</th>
+              <th className="th whitespace-nowrap">Car</th>
+              <th className="th whitespace-nowrap">Odometer</th>
+              <th className="th whitespace-nowrap">Engine h.</th>
+              <th className="th whitespace-nowrap">Start</th>
+              <th className="th whitespace-nowrap">End</th>
+              <th className="th whitespace-nowrap">Type</th>
+              <th className="th whitespace-nowrap">Description</th>
               <th className="th"></th>
             </tr>
           </thead>
+
           <tbody>
             {logs.map((l) => (
               <tr key={l.id} className="tr">
-                <td className="td">{l.providerId}</td>
-                <td className="td">{l.serviceOrder}</td>
-                <td className="td">{l.carId}</td>
-                <td className="td">{l.odometer}</td>
-                <td className="td">{l.engineHours}</td>
-                <td className="td">{l.startDate}</td>
-                <td className="td">{l.endDate}</td>
-                <td className="td">
-                  <TypeBadge t={l.type} />
+                <td className="td overflow-hidden">
+                  <Ellipsis text={l.providerId} lines={2} />
                 </td>
-                <td className="td max-w-[360px]">
-                  <span className="block truncate">{l.serviceDescription}</span>
+                <td className="td overflow-hidden">
+                  <Ellipsis text={l.serviceOrder} lines={1} />
+                </td>
+                <td className="td overflow-hidden">
+                  <Ellipsis text={l.carId} lines={1} />
+                </td>
+                <td className="td overflow-hidden">
+                  <Ellipsis text={String(l.odometer)} lines={1} />
+                </td>
+                <td className="td overflow-hidden">
+                  <Ellipsis text={String(l.engineHours)} lines={1} />
+                </td>
+                <td className="td overflow-hidden">
+                  <Ellipsis text={l.startDate} lines={1} />
+                </td>
+                <td className="td overflow-hidden">
+                  <Ellipsis text={l.endDate} lines={1} />
+                </td>
+                <td className="td">
+                  <TypeBadge type={l.type} />
+                </td>
+                <td className="td overflow-hidden">
+                  <Ellipsis text={l.serviceDescription} lines={2} />
                 </td>
                 <td className="td">
                   <div className="flex gap-2">

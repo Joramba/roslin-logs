@@ -82,7 +82,8 @@
 
 @layer utilities {
   .container {
-    @apply mx-auto max-w-7xl;
+    @apply mx-auto;
+    max-width: min(96vw, 1440px);
   }
   .table {
     @apply min-w-full table-auto;
@@ -96,4 +97,23 @@
   .tr {
     @apply border-t hover:bg-gray-50/70;
   }
+}
+
+/* Ellipsis helpers (single & multiline) */
+.ellipsis-1 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ellipsis-2,
+.ellipsis-3 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.ellipsis-2 {
+  -webkit-line-clamp: 2;
+}
+.ellipsis-3 {
+  -webkit-line-clamp: 3;
 }

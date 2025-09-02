@@ -92,13 +92,13 @@ export default function EditLogDialog({
           className="card p-4 md:p-5 shadow-xl ring-1 ring-black/10"
         >
           {/* Compact sticky header */}
-          <div className="flex items-center justify-between sticky top-0 -mx-4 md:-mx-5 py-2 bg-white/95 backdrop-blur border-b">
+          <div className="flex items-center justify-between sticky px-4 md:px-5 top-0 -mx-4 md:-mx-5 py-2 bg-white/95 backdrop-blur border-b">
             <Dialog.Title className="text-2xl font-semibold">
               Edit log
             </Dialog.Title>
             <Dialog.Close
               aria-label="Close"
-              className="rounded-md px-2 py-1 text-sm hover:bg-black/5 "
+              className="rounded-md px-2 py-1 text-sm hover:bg-black/5"
             >
               ×
             </Dialog.Close>

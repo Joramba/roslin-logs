@@ -7,6 +7,7 @@ import {
   clearAllDrafts,
 } from "./draftsSlice";
 import { useToast } from "@/components/ui/Toaster";
+import Ellipsis from "@/components/ui/Ellipsis";
 
 export default function DraftList() {
   const dispatch = useDispatch<AppDispatch>();
@@ -51,6 +52,7 @@ export default function DraftList() {
           return (
             <li
               key={id}
+              role="button"
               onClick={() => dispatch(selectDraft(id))}
               className={[
                 "cursor-pointer p-3 rounded-xl border transition flex items-center justify-between",
@@ -59,16 +61,23 @@ export default function DraftList() {
                   : "hover:bg-gray-50",
               ].join(" ")}
             >
-              <div className="text-left">
-                <div className="font-medium">
-                  {d.providerId || "(untitled)"}
-                </div>
-                <div className="text-xs opacity-70">
-                  {d.serviceOrder || "—"} · {d.carId || "—"}
-                </div>
+              {/* Text column must be flex-1/min-w-0 so ellipsis can clamp */}
+              <div className="text-left flex-1 min-w-0">
+                {/* Title: up to 2 lines with tooltip on hover */}
+                <Ellipsis
+                  text={d.providerId?.trim() || "(untitled)"}
+                  lines={2}
+                  className="font-medium block"
+                />
+                {/* Subline: single-line ellipsis with tooltip */}
+                <Ellipsis
+                  text={`${d.serviceOrder || "—"} · ${d.carId || "—"}`}
+                  lines={1}
+                  className="text-xs opacity-70 mt-1 block"
+                />
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 pl-3">
                 {isActive && <span className="badge badge-active">Active</span>}
                 <span
                   className={`text-xs ${
