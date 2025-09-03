@@ -66,36 +66,49 @@ export default function DraftList() {
         {order.map((id) => {
           const d = byId[id];
           const isActive = id === activeDraftId;
+
           return (
             <li
               key={id}
               onClick={() => dispatch(selectDraft(id))}
               className={[
+                // base
                 "cursor-pointer p-3 rounded-xl border transition flex items-center justify-between",
+                // light theme
+                "bg-white",
                 isActive
                   ? "bg-blue-50 border-blue-400 ring-2 ring-blue-100"
                   : "hover:bg-gray-50",
+                // dark theme only
+                "dark:bg-gray-900 dark:border-gray-700",
+                isActive
+                  ? "dark:bg-blue-900/20 dark:border-blue-400/60 dark:ring-2 dark:ring-blue-300/20"
+                  : "dark:hover:bg-white/5",
               ].join(" ")}
-              title={`${d.providerId || "(untitled)"} — ${
-                d.serviceOrder || "—"
-              } · ${d.carId || "—"}`}
             >
-              <div className="text-left max-w-[28rem]">
-                <div className="font-medium truncate">
+              <div className="text-left min-w-0">
+                <div className="font-medium truncate text-gray-900 dark:text-gray-100">
                   {d.providerId || "(untitled)"}
                 </div>
-                <div className="text-xs opacity-70 truncate">
+                <div className="text-xs opacity-70 text-gray-500 dark:text-gray-400 truncate">
                   {d.serviceOrder || "—"} · {d.carId || "—"}
                 </div>
               </div>
 
               <div className="flex items-center gap-2">
-                {isActive && <span className="badge badge-active">Active</span>}
+                {isActive && (
+                  <span
+                    className="badge badge-active
+                             dark:bg-blue-500/15 dark:text-blue-200 dark:border-blue-400/40"
+                  >
+                    Active
+                  </span>
+                )}
                 <span
                   className={`text-xs ${
                     d.savingStatus === "saved"
-                      ? "text-emerald-600"
-                      : "text-gray-500"
+                      ? "text-emerald-600 dark:text-emerald-400"
+                      : "text-gray-500 dark:text-gray-400"
                   }`}
                 >
                   {d.savingStatus === "saving" ? "Saving…" : "Saved"}
@@ -115,7 +128,6 @@ export default function DraftList() {
         confirmText="Delete"
         cancelText="Cancel"
         onConfirm={confirmDelete}
-        danger
       />
 
       {/* Confirm clear all drafts */}
@@ -127,7 +139,6 @@ export default function DraftList() {
         confirmText="Clear"
         cancelText="Cancel"
         onConfirm={confirmClearAll}
-        danger
       />
     </div>
   );

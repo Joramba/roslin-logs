@@ -10,8 +10,10 @@ export default function EmptyDraft() {
       <div className="text-5xl mb-2" aria-hidden>
         🧾
       </div>
-      <h3 className="text-lg font-semibold">Start a new draft</h3>
-      <p className="text-sm mt-1 mb-4 max-w-md">
+      <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-100">
+        Start a new draft
+      </h3>
+      <p className="text-sm text-gray-500 dark:text-gray-300 mt-1 mb-2">
         Create a service log draft to begin filling out the form.
       </p>
 

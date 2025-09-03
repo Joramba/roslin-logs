@@ -105,23 +105,28 @@ export default function EditLogDialog({
           }}
           className="card p-4 md:p-5 shadow-xl ring-1 ring-black/10"
         >
-          <div className="sticky top-0 bg-white/95 backdrop-blur">
-            <div className="flex items-center justify-between border-b pb-2">
+          <div
+            className="sticky top-0 bg-white/95 dark:bg-gray-900/95 backdrop-blur
+                border-b border-gray-200 dark:border-gray-700"
+          >
+            <div className="flex items-center justify-between py-2">
               <Dialog.Title className="text-2xl font-semibold">
                 Edit log
               </Dialog.Title>
               <Dialog.Close
                 aria-label="Close"
-                className="
-                  rounded-lg p-2 text-2xl leading-none
-                  hover:bg-black/5 cursor-pointer
-                  transition-colors duration-150 ease-out
-                  select-none
-                "
+                className="rounded-lg p-2 text-2xl leading-none
+                 hover:bg-black/5 dark:hover:bg-white/10 cursor-pointer
+                 transition-colors select-none"
               >
                 ×
               </Dialog.Close>
             </div>
+
+            {/* Hidden for sighted users, fixes a11y warning */}
+            <Dialog.Description className="sr-only">
+              Edit an existing service log. All fields below are editable.
+            </Dialog.Description>
           </div>
 
           {local && (
@@ -211,7 +216,7 @@ export default function EditLogDialog({
                   disabled
                   readOnly
                 />
-                <span className="text-xs text-gray-500 mt-1 block">
+                <span className="text-xs text-gray-600 dark:text-gray-300 mt-1 block">
                   End date is automatically set to the next day.
                 </span>
               </Field>

@@ -68,17 +68,17 @@ export default function LogsTable() {
       <div className="card overflow-auto">
         <table className="table w-full" style={{ tableLayout: "fixed" }}>
           <ColGroup />
-          <thead className="bg-gray-50">
+          <thead className="bg-gray-50 dark:bg-gray-800/60 dark:text-gray-300">
             <tr>
-              <th className="th whitespace-nowrap">Provider</th>
-              <th className="th whitespace-nowrap">Order</th>
-              <th className="th whitespace-nowrap">Car</th>
-              <th className="th whitespace-nowrap">Odometer</th>
-              <th className="th whitespace-nowrap">Engine h.</th>
-              <th className="th whitespace-nowrap">Start</th>
-              <th className="th whitespace-nowrap">End</th>
-              <th className="th whitespace-nowrap">Type</th>
-              <th className="th whitespace-nowrap">Description</th>
+              <th className="th">Provider</th>
+              <th className="th">Order</th>
+              <th className="th">Car</th>
+              <th className="th">Odometer</th>
+              <th className="th">Engine h.</th>
+              <th className="th">Start</th>
+              <th className="th">End</th>
+              <th className="th">Type</th>
+              <th className="th">Description</th>
               <th className="th"></th>
             </tr>
           </thead>
@@ -152,7 +152,6 @@ export default function LogsTable() {
         confirmText="Delete"
         cancelText="Cancel"
         onConfirm={confirmDelete}
-        danger
       />
     </div>
   );

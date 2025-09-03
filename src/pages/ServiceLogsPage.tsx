@@ -8,6 +8,7 @@ import type { ServiceLog } from "@/types";
 import { nanoid } from "nanoid";
 import { addLog } from "@/features/serviceLogs/logsSlice";
 import { useToast } from "@/components/ui/Toaster";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 
 export default function ServiceLogsPage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -62,7 +63,10 @@ export default function ServiceLogsPage() {
 
   return (
     <div className="container p-6 space-y-8">
-      <h1 className="text-2xl font-bold">Service Logs</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold">Service Logs</h1>
+        <ThemeToggle />
+      </div>
 
       <section className={gridClass}>
         {hasDrafts && (
