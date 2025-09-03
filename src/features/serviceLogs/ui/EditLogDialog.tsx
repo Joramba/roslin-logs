@@ -1,14 +1,14 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "@/app/store";
-import { updateLog } from "./logsSlice";
+import { updateLog } from "../model/logsSlice";
 import type { ServiceLog } from "@/types";
-import { validateDraft } from "@/lib/validation";
-import { MIN_ISO_DATE, plusOneDayISO } from "@/lib/dates";
+import { validateDraft } from "@/shared/lib/validation";
+import { MIN_ISO_DATE, plusOneDayISO } from "@/shared/lib/dates";
 import { useEffect, useMemo, useState } from "react";
-import { useToast } from "@/components/ui/Toaster";
-import Field, { fieldErrorClass } from "@/components/form/Field";
-import { SERVICE_TYPES } from "@/constants/serviceTypes";
+import { useToast } from "@/shared/ui/Toaster";
+import { SERVICE_TYPES } from "@/shared/constants/serviceTypes";
+import Field, { fieldErrorClass } from "@/shared/ui/form/Field";
 
 export default function EditLogDialog({
   id,

@@ -6,18 +6,18 @@ import {
   setType,
   setStartFrom,
   setStartTo,
-} from "./filtersSlice";
-import EditLogDialog from "./EditLogDialog";
-import { deleteLog } from "./logsSlice";
+} from "../model/filtersSlice";
+import { deleteLog } from "../model/logsSlice";
 import { useState } from "react";
-import { useToast } from "@/components/ui/Toaster";
-import DateFilterInput from "@/components/form/DateFilterInput";
-import Select from "@/components/form/Select";
-import { FILTER_TYPE_OPTIONS } from "@/constants/serviceTypes";
-import Ellipsis from "@/components/ui/Ellipsis";
+import { useToast } from "@/shared/ui/Toaster";
+import { FILTER_TYPE_OPTIONS } from "@/shared/constants/serviceTypes";
+import Ellipsis from "@/shared/ui/Ellipsis";
+import { ColGroup } from "../lib/tableLayout";
+import ConfirmDialog from "@/shared/ui/ConfirmDialog";
+import Select from "@/shared/ui/form/Select";
+import DateFilterInput from "@/shared/ui/form/DateFilterInput";
+import EditLogDialog from "./EditLogDialog";
 import TypeBadge from "./TypeBadge";
-import { ColGroup } from "./tableLayout";
-import ConfirmDialog from "@/components/ui/ConfirmDialog";
 
 export default function LogsTable() {
   const dispatch = useDispatch<AppDispatch>();

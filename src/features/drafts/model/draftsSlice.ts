@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { nanoid } from "nanoid";
 import type { ServiceDraft } from "@/types";
-import { todayISO, plusOneDayISO } from "@/lib/dates";
+import { todayISO, plusOneDayISO } from "@/shared/lib/dates";
 
 type DraftsState = {
   byId: Record<string, ServiceDraft>;

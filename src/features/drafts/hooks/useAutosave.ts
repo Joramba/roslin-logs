@@ -2,9 +2,9 @@ import { useEffect, useRef } from 'react'
 import debounce from 'lodash.debounce'
 import { useDispatch } from 'react-redux'
 import type { AppDispatch } from '@/app/store'
-import { markSaved } from './draftsSlice'
+import { markSaved } from '../model/draftsSlice'
 import type { ServiceDraft } from '@/types'
-import { validateDraft } from '@/lib/validation'
+import { validateDraft } from '@/shared/lib/validation'
 
 // Lightweight autosave that just flips "saving" -> "saved" after debounce.
 // In a real app, you'd POST to a backend here.

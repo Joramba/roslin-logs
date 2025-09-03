@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "@/app/store";
-import { createDraft } from "@/features/drafts/draftsSlice";
+import { createDraft } from "@/features/drafts/model/draftsSlice";
 
 export default function EmptyDraft() {
   const dispatch = useDispatch<AppDispatch>();

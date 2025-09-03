@@ -5,9 +5,9 @@ import {
   selectDraft,
   deleteDraft,
   clearAllDrafts,
-} from "./draftsSlice";
-import { useToast } from "@/components/ui/Toaster";
-import ConfirmDialog from "@/components/ui/ConfirmDialog";
+} from "../model/draftsSlice";
+import { useToast } from "@/shared/ui/Toaster";
+import ConfirmDialog from "@/shared/ui/ConfirmDialog";
 import { useState } from "react";
 
 export default function DraftList() {

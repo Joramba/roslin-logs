@@ -1,12 +1,12 @@
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState, AppDispatch } from "@/app/store";
-import { updateField } from "./draftsSlice";
-import { useAutosave } from "./useAutosave";
-import { validateDraft } from "@/lib/validation";
+import { updateField } from "../model/draftsSlice";
+import { useAutosave } from "../hooks/useAutosave";
+import { validateDraft } from "@/shared/lib/validation";
 import { useEffect, useState } from "react";
-import Field, { fieldErrorClass } from "@/components/form/Field";
-import Select from "@/components/form/Select";
-import { SERVICE_TYPES } from "@/constants/serviceTypes";
+import { SERVICE_TYPES } from "@/shared/constants/serviceTypes";
+import Field, { fieldErrorClass } from "@/shared/ui/form/Field";
+import Select from "@/shared/ui/form/Select";
 import EmptyDraft from "./EmptyDraft";
 
 export default function DraftForm() {
